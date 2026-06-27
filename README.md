@@ -2,59 +2,76 @@
 
 **The neutral leaderboard for AI agent safety & security detectors.**
 
-This is the part of OpenGuardrails that OpenTelemetry has no analogue for. OGR
-does not build detection capability — it **referees**. Any
+OpenGuardrails does not build detection capability — it **referees**. Any
 [OGR-conformant](https://github.com/openguardrails/openguardrails-spec) detector
 (config-based or model-based) can be run against shared corpora here and ranked
-on a level field.
+on a level field. We never fabricate a vendor's score; numbers come from the
+harness or they don't appear.
 
-> Your homepage today says "OpenGuardrails beats LlamaGuard / Qwen3Guard." Under
-> this positioning OGR is no longer a contestant in that table — it **runs** the
-> table, and LlamaGuard, Qwen3Guard, OpenAI, Anthropic, and every vendor appear
-> in it.
-
-## Why a benchmark is the wedge
-
-- A `score` from one vendor is **not** comparable to another's — except through
-  a common harness on common data. That incomparability is the entire reason the
-  leaderboard must exist, and why it is defensible neutral ground.
-- It gives users a reason to adopt the standard: *pick vendors by measured
-  ability, compose them, switch freely.*
-- It gives vendors a reason to adopt the standard: *one integration, ranked
-  distribution to every agent.*
-
-## Structure (planned)
-
-```
-suites/
-  security/
-    prompt_injection/      # direct + indirect (tool-result / web / MCP origin)
-    malicious_command/     # pipe-to-shell, obfuscation, destructive ops
-    data_exfiltration/
-    secret_leak/
-    tool_poisoning/        # malicious MCP/tool DEFINITIONS
-  safety/
-    toxicity/  self_harm/  pii/  ...
-harness/                   # runs any OGR-conformant detector over a suite
-  run.py                   # detector → GuardEvents → Verdicts → scored
-leaderboard/               # published results (feeds openguardrails.com)
+```bash
+python3 harness/run.py        # stdlib only — runs the reference detectors, writes leaderboard/
 ```
 
-Each case is a `GuardEvent` (often with `provenance`, since indirect injection is
-only meaningful with an untrusted origin) plus a labeled expected outcome. The
-harness reports per-category **precision / recall / F1**, latency, and
-calibration — the same axes vendors compete on.
+## Results — `seed-v0`
 
-## Conformance vs. benchmark
+Real outputs of reference detectors + baselines (full table in
+[`leaderboard/RESULTS.md`](leaderboard/RESULTS.md), machine-readable in
+[`leaderboard/results.json`](leaderboard/results.json)):
 
-- **Conformance** (separate, pass/fail): does the detector correctly accept a
-  `GuardEvent` and return a schema-valid `Verdict`? A prerequisite to being
-  listed.
-- **Benchmark** (this repo, ranked): how *good* is it?
+| Detector | Type | Injection | Malicious-cmd | Exfil | Secret-leak | Macro F1 |
+|---|---|---|---|---|---|---|
+| keyword-baseline | baseline | 0.400 | 0.800 | 0.667 | 0.667 | 0.634 |
+| **ogr-compose (config⊕llm)** | hybrid | **0.889** | 0.667 | 0.545 | 0.400 | **0.625** |
+| block-all | baseline | 0.625 | 0.625 | 0.571 | 0.571 | 0.598 |
+| config-rules | config | 0.333 | 0.667 | 0.400 | 0.400 | 0.450 |
+| llm-judge (provenance-aware) | model | **0.889** | 0.333 | 0.400 | 0.000 | 0.406 |
+| allow-all | baseline | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
 
-## Status
+What the real numbers show:
 
-`v0` — scaffolding. Seed suites and the harness interface land next, built on the
-`GuardEvent`/`Verdict` types proven in
-[`openguardrails-poc`](https://github.com/openguardrails/openguardrails-poc).
-Submissions and governance of the corpora will be foundation-neutral.
+1. **Provenance wins on injection.** The provenance-aware detectors hit F1 0.889
+   (P=1.00, R=0.80) on prompt injection; config-rules gets 0.333, keyword 0.400.
+   Knowing the input came from an untrusted origin is what catches it.
+2. **Composition beats its parts.** `config⊕llm` (macro 0.625) outperforms config
+   (0.450) and llm (0.406) alone — the whole reason composition is a first-class
+   spec concept.
+3. **Honest caveat.** `keyword-baseline` tops macro on `seed-v0` *only* because the
+   seed is signature-heavy (literal `curl`, `/etc/passwd`, …). Its injection F1 is
+   0.40 and it false-positives on benign `curl`. The next milestone is obfuscated
+   and paraphrased cases where signature matching collapses.
+
+## What's here
+
+```
+suites/security/
+  _benign.jsonl          # shared safe cases (negatives), paired with every suite
+  prompt_injection.jsonl # positives, carry untrusted provenance
+  malicious_command.jsonl
+  data_exfiltration.jsonl
+  secret_leak.jsonl
+harness/
+  ogrlib.py              # minimal OGR types (mirrors openguardrails-spec)
+  detectors.py           # reference detectors + baselines (NOT third-party vendors)
+  run.py                 # scores every detector → leaderboard/{results.json,RESULTS.md}
+leaderboard/             # generated results (feeds openguardrails.com)
+```
+
+Case format: one JSON object per line — `{id, suite, unsafe: bool, event: {...GuardEvent}}`.
+Positives carry realistic `provenance` (indirect injection is only meaningful with
+an untrusted origin). Scoring is binary per suite (a detector predicts unsafe iff
+its `decision` ∈ {block, require_approval, redact}); the harness reports
+precision / recall / F1 per category, macro-F1, and p95 latency.
+
+## Submit a detector
+
+Implement the OGR contract — `evaluate(GuardEvent) → Verdict` — wrap it as a
+`detectors.py`-style adapter, and open a PR. Conformance (schema-valid verdicts)
+is the prerequisite to being listed; the benchmark is the ranking. Corpora
+governance will be foundation-neutral.
+
+## Roadmap
+
+- Obfuscated / paraphrased / novel-domain cases (break the keyword baseline).
+- `safety.*` suites (toxicity, self-harm, PII).
+- `tool_poisoning` suite (malicious MCP/tool **definitions**).
+- Adapters for real guard models so vendors appear with real numbers.

@@ -1,0 +1,317 @@
+{
+  "version": "seed-v0",
+  "suiteOrder": [
+    "prompt_injection",
+    "malicious_command",
+    "data_exfiltration",
+    "secret_leak"
+  ],
+  "counts": {
+    "prompt_injection": {
+      "unsafe": 10,
+      "safe": 12
+    },
+    "malicious_command": {
+      "unsafe": 10,
+      "safe": 12
+    },
+    "data_exfiltration": {
+      "unsafe": 8,
+      "safe": 12
+    },
+    "secret_leak": {
+      "unsafe": 8,
+      "safe": 12
+    }
+  },
+  "detectors": [
+    {
+      "name": "keyword-baseline",
+      "type": "config",
+      "perSuite": {
+        "prompt_injection": {
+          "precision": 0.6,
+          "recall": 0.3,
+          "f1": 0.4,
+          "tp": 3,
+          "fp": 2,
+          "fn": 7,
+          "tn": 10,
+          "p95ms": 0.0038
+        },
+        "malicious_command": {
+          "precision": 0.8,
+          "recall": 0.8,
+          "f1": 0.8,
+          "tp": 8,
+          "fp": 2,
+          "fn": 2,
+          "tn": 10,
+          "p95ms": 0.0018
+        },
+        "data_exfiltration": {
+          "precision": 0.714,
+          "recall": 0.625,
+          "f1": 0.667,
+          "tp": 5,
+          "fp": 2,
+          "fn": 3,
+          "tn": 10,
+          "p95ms": 0.0017
+        },
+        "secret_leak": {
+          "precision": 0.714,
+          "recall": 0.625,
+          "f1": 0.667,
+          "tp": 5,
+          "fp": 2,
+          "fn": 3,
+          "tn": 10,
+          "p95ms": 0.0015
+        }
+      },
+      "macroF1": 0.634,
+      "p95ms": 0.0038
+    },
+    {
+      "name": "ogr-compose (config\u2295llm)",
+      "type": "hybrid",
+      "perSuite": {
+        "prompt_injection": {
+          "precision": 1.0,
+          "recall": 0.8,
+          "f1": 0.889,
+          "tp": 8,
+          "fp": 0,
+          "fn": 2,
+          "tn": 12,
+          "p95ms": 0.0015
+        },
+        "malicious_command": {
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.667,
+          "tp": 5,
+          "fp": 0,
+          "fn": 5,
+          "tn": 12,
+          "p95ms": 0.0013
+        },
+        "data_exfiltration": {
+          "precision": 1.0,
+          "recall": 0.375,
+          "f1": 0.545,
+          "tp": 3,
+          "fp": 0,
+          "fn": 5,
+          "tn": 12,
+          "p95ms": 0.0015
+        },
+        "secret_leak": {
+          "precision": 1.0,
+          "recall": 0.25,
+          "f1": 0.4,
+          "tp": 2,
+          "fp": 0,
+          "fn": 6,
+          "tn": 12,
+          "p95ms": 0.0015
+        }
+      },
+      "macroF1": 0.625,
+      "p95ms": 0.0015
+    },
+    {
+      "name": "block-all",
+      "type": "baseline",
+      "perSuite": {
+        "prompt_injection": {
+          "precision": 0.455,
+          "recall": 1.0,
+          "f1": 0.625,
+          "tp": 10,
+          "fp": 12,
+          "fn": 0,
+          "tn": 0,
+          "p95ms": 0.0002
+        },
+        "malicious_command": {
+          "precision": 0.455,
+          "recall": 1.0,
+          "f1": 0.625,
+          "tp": 10,
+          "fp": 12,
+          "fn": 0,
+          "tn": 0,
+          "p95ms": 0.0001
+        },
+        "data_exfiltration": {
+          "precision": 0.4,
+          "recall": 1.0,
+          "f1": 0.571,
+          "tp": 8,
+          "fp": 12,
+          "fn": 0,
+          "tn": 0,
+          "p95ms": 0.0001
+        },
+        "secret_leak": {
+          "precision": 0.4,
+          "recall": 1.0,
+          "f1": 0.571,
+          "tp": 8,
+          "fp": 12,
+          "fn": 0,
+          "tn": 0,
+          "p95ms": 0.0
+        }
+      },
+      "macroF1": 0.598,
+      "p95ms": 0.0002
+    },
+    {
+      "name": "config-rules",
+      "type": "config",
+      "perSuite": {
+        "prompt_injection": {
+          "precision": 1.0,
+          "recall": 0.2,
+          "f1": 0.333,
+          "tp": 2,
+          "fp": 0,
+          "fn": 8,
+          "tn": 12,
+          "p95ms": 0.0017
+        },
+        "malicious_command": {
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.667,
+          "tp": 5,
+          "fp": 0,
+          "fn": 5,
+          "tn": 12,
+          "p95ms": 0.0009
+        },
+        "data_exfiltration": {
+          "precision": 1.0,
+          "recall": 0.25,
+          "f1": 0.4,
+          "tp": 2,
+          "fp": 0,
+          "fn": 6,
+          "tn": 12,
+          "p95ms": 0.0009
+        },
+        "secret_leak": {
+          "precision": 1.0,
+          "recall": 0.25,
+          "f1": 0.4,
+          "tp": 2,
+          "fp": 0,
+          "fn": 6,
+          "tn": 12,
+          "p95ms": 0.0014
+        }
+      },
+      "macroF1": 0.45,
+      "p95ms": 0.0017
+    },
+    {
+      "name": "llm-judge",
+      "type": "model",
+      "perSuite": {
+        "prompt_injection": {
+          "precision": 1.0,
+          "recall": 0.8,
+          "f1": 0.889,
+          "tp": 8,
+          "fp": 0,
+          "fn": 2,
+          "tn": 12,
+          "p95ms": 0.0016
+        },
+        "malicious_command": {
+          "precision": 1.0,
+          "recall": 0.2,
+          "f1": 0.333,
+          "tp": 2,
+          "fp": 0,
+          "fn": 8,
+          "tn": 12,
+          "p95ms": 0.0006
+        },
+        "data_exfiltration": {
+          "precision": 1.0,
+          "recall": 0.25,
+          "f1": 0.4,
+          "tp": 2,
+          "fp": 0,
+          "fn": 6,
+          "tn": 12,
+          "p95ms": 0.0006
+        },
+        "secret_leak": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 8,
+          "tn": 12,
+          "p95ms": 0.0005
+        }
+      },
+      "macroF1": 0.406,
+      "p95ms": 0.0016
+    },
+    {
+      "name": "allow-all",
+      "type": "baseline",
+      "perSuite": {
+        "prompt_injection": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 10,
+          "tn": 12,
+          "p95ms": 0.0003
+        },
+        "malicious_command": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 10,
+          "tn": 12,
+          "p95ms": 0.0001
+        },
+        "data_exfiltration": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 8,
+          "tn": 12,
+          "p95ms": 0.0001
+        },
+        "secret_leak": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 8,
+          "tn": 12,
+          "p95ms": 0.0
+        }
+      },
+      "macroF1": 0.0,
+      "p95ms": 0.0003
+    }
+  ]
+}
