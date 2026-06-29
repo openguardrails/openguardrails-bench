@@ -48,6 +48,11 @@ class ConfigRules:
     SECRET_MARKERS = ("SECRET", "TOKEN", "AWS_", "PASSWORD", "PRIVATE_KEY")
     RULES = [
         (re.compile(r"(curl|wget)\b.*\|\s*(ba)?sh"), "require_approval"),
+        # remote fetch inside a command substitution / eval (e.g. eval "$(curl …)")
+        (re.compile(r"\$\(\s*(curl|wget)\b"), "require_approval"),
+        (re.compile(r"\beval\b.*\b(curl|wget)\b"), "require_approval"),
+        # download-then-exec that sidesteps the pipe-to-shell shape
+        (re.compile(r"(curl|wget)\b.*&&.*chmod\s+\+?x"), "require_approval"),
         (re.compile(r"rm\s+-rf\s+/(\s|$)"), "block"),
         (re.compile(r"\|\s*sudo\b"), "require_approval"),
     ]

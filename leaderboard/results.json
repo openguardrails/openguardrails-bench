@@ -26,6 +26,54 @@
   },
   "detectors": [
     {
+      "name": "ogr-compose (config\u2295llm)",
+      "type": "hybrid",
+      "perSuite": {
+        "prompt_injection": {
+          "precision": 1.0,
+          "recall": 0.818,
+          "f1": 0.9,
+          "tp": 9,
+          "fp": 0,
+          "fn": 2,
+          "tn": 14,
+          "p95ms": 0.002
+        },
+        "malicious_command": {
+          "precision": 1.0,
+          "recall": 0.667,
+          "f1": 0.8,
+          "tp": 8,
+          "fp": 0,
+          "fn": 4,
+          "tn": 14,
+          "p95ms": 0.0022
+        },
+        "data_exfiltration": {
+          "precision": 1.0,
+          "recall": 0.3,
+          "f1": 0.462,
+          "tp": 3,
+          "fp": 0,
+          "fn": 7,
+          "tn": 14,
+          "p95ms": 0.0028
+        },
+        "secret_leak": {
+          "precision": 1.0,
+          "recall": 0.25,
+          "f1": 0.4,
+          "tp": 2,
+          "fp": 0,
+          "fn": 6,
+          "tn": 14,
+          "p95ms": 0.0022
+        }
+      },
+      "macroF1": 0.641,
+      "p95ms": 0.0028
+    },
+    {
       "name": "keyword-baseline",
       "type": "config",
       "perSuite": {
@@ -37,7 +85,7 @@
           "fp": 4,
           "fn": 7,
           "tn": 10,
-          "p95ms": 0.0038
+          "p95ms": 0.0041
         },
         "malicious_command": {
           "precision": 0.714,
@@ -47,7 +95,7 @@
           "fp": 4,
           "fn": 2,
           "tn": 10,
-          "p95ms": 0.0017
+          "p95ms": 0.0018
         },
         "data_exfiltration": {
           "precision": 0.636,
@@ -57,7 +105,7 @@
           "fp": 4,
           "fn": 3,
           "tn": 10,
-          "p95ms": 0.0018
+          "p95ms": 0.0017
         },
         "secret_leak": {
           "precision": 0.556,
@@ -71,7 +119,7 @@
         }
       },
       "macroF1": 0.611,
-      "p95ms": 0.0038
+      "p95ms": 0.0041
     },
     {
       "name": "block-all",
@@ -115,59 +163,11 @@
           "fp": 14,
           "fn": 0,
           "tn": 0,
-          "p95ms": 0.0
+          "p95ms": 0.0001
         }
       },
       "macroF1": 0.591,
       "p95ms": 0.0001
-    },
-    {
-      "name": "ogr-compose (config\u2295llm)",
-      "type": "hybrid",
-      "perSuite": {
-        "prompt_injection": {
-          "precision": 1.0,
-          "recall": 0.818,
-          "f1": 0.9,
-          "tp": 9,
-          "fp": 0,
-          "fn": 2,
-          "tn": 14,
-          "p95ms": 0.0015
-        },
-        "malicious_command": {
-          "precision": 1.0,
-          "recall": 0.417,
-          "f1": 0.588,
-          "tp": 5,
-          "fp": 0,
-          "fn": 7,
-          "tn": 14,
-          "p95ms": 0.0015
-        },
-        "data_exfiltration": {
-          "precision": 1.0,
-          "recall": 0.3,
-          "f1": 0.462,
-          "tp": 3,
-          "fp": 0,
-          "fn": 7,
-          "tn": 14,
-          "p95ms": 0.0016
-        },
-        "secret_leak": {
-          "precision": 1.0,
-          "recall": 0.25,
-          "f1": 0.4,
-          "tp": 2,
-          "fp": 0,
-          "fn": 6,
-          "tn": 14,
-          "p95ms": 0.0015
-        }
-      },
-      "macroF1": 0.588,
-      "p95ms": 0.0016
     },
     {
       "name": "config-rules",
@@ -181,17 +181,17 @@
           "fp": 0,
           "fn": 8,
           "tn": 14,
-          "p95ms": 0.0016
+          "p95ms": 0.0021
         },
         "malicious_command": {
           "precision": 1.0,
-          "recall": 0.417,
-          "f1": 0.588,
-          "tp": 5,
+          "recall": 0.667,
+          "f1": 0.8,
+          "tp": 8,
           "fp": 0,
-          "fn": 7,
+          "fn": 4,
           "tn": 14,
-          "p95ms": 0.0008
+          "p95ms": 0.0017
         },
         "data_exfiltration": {
           "precision": 1.0,
@@ -201,7 +201,7 @@
           "fp": 0,
           "fn": 8,
           "tn": 14,
-          "p95ms": 0.0009
+          "p95ms": 0.0022
         },
         "secret_leak": {
           "precision": 1.0,
@@ -211,11 +211,11 @@
           "fp": 0,
           "fn": 6,
           "tn": 14,
-          "p95ms": 0.0014
+          "p95ms": 0.0016
         }
       },
-      "macroF1": 0.438,
-      "p95ms": 0.0016
+      "macroF1": 0.491,
+      "p95ms": 0.0022
     },
     {
       "name": "llm-judge",
@@ -229,7 +229,7 @@
           "fp": 0,
           "fn": 2,
           "tn": 14,
-          "p95ms": 0.0016
+          "p95ms": 0.0018
         },
         "malicious_command": {
           "precision": 1.0,
@@ -249,7 +249,7 @@
           "fp": 0,
           "fn": 8,
           "tn": 14,
-          "p95ms": 0.0007
+          "p95ms": 0.0008
         },
         "secret_leak": {
           "precision": 0.0,
@@ -263,7 +263,7 @@
         }
       },
       "macroF1": 0.38,
-      "p95ms": 0.0016
+      "p95ms": 0.0018
     },
     {
       "name": "allow-all",
@@ -277,7 +277,7 @@
           "fp": 0,
           "fn": 11,
           "tn": 14,
-          "p95ms": 0.0003
+          "p95ms": 0.0004
         },
         "malicious_command": {
           "precision": 0.0,
@@ -297,7 +297,7 @@
           "fp": 0,
           "fn": 10,
           "tn": 14,
-          "p95ms": 0.0001
+          "p95ms": 0.0
         },
         "secret_leak": {
           "precision": 0.0,
@@ -311,7 +311,7 @@
         }
       },
       "macroF1": 0.0,
-      "p95ms": 0.0003
+      "p95ms": 0.0004
     }
   ]
 }
