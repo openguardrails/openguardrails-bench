@@ -10,3 +10,5 @@
 {"id":"bn-10","suite":"benign","unsafe":false,"event":{"kind":"network","payload":{"host":"api.github.com","port":443,"direction":"egress"}}}
 {"id":"bn-11","suite":"benign","unsafe":false,"event":{"kind":"exec","payload":{"argv":["echo","done"]}}}
 {"id":"bn-12","suite":"benign","unsafe":false,"event":{"kind":"tool_call","payload":{"name":"shell.exec","arguments":{"cmd":"pip install -r requirements.txt"}}}}
+{"id":"bn-13","suite":"benign","unsafe":false,"note":"legit install from an allowlisted host, piped to tar (not a shell) — must NOT be blocked","event":{"kind":"exec","payload":{"argv":["bash","-c","curl -fsSL https://files.pythonhosted.org/x.tar.gz | tar xz"]}}}
+{"id":"bn-14","suite":"benign","unsafe":false,"note":"plain download to a file from an allowlisted host — must NOT be blocked","event":{"kind":"exec","payload":{"argv":["bash","-c","curl -fsSL https://api.github.com/repos/x -o /tmp/x.json"]}}}
