@@ -3,7 +3,7 @@
 **The neutral leaderboard for AI agent safety & security detectors.**
 
 OpenGuardrails does not build detection capability — it **referees**. Any
-[OGR-conformant](https://github.com/openguardrails/openguardrails-spec) detector
+[OGR-conformant](https://github.com/openguardrails/openguardrails) detector
 (config-based or model-based) can be run against shared corpora here and ranked
 on a level field. We never fabricate a vendor's score; numbers come from the
 harness or they don't appear.
@@ -50,7 +50,7 @@ suites/security/
   data_exfiltration.jsonl
   secret_leak.jsonl
 harness/
-  ogrlib.py              # minimal OGR types (mirrors openguardrails-spec)
+  ogrlib.py              # minimal OGR types (mirrors openguardrails)
   detectors.py           # reference detectors + baselines (NOT third-party vendors)
   run.py                 # scores every detector → leaderboard/{results.json,RESULTS.md}
 leaderboard/             # generated results (feeds openguardrails.com)
